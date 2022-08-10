@@ -1,0 +1,50 @@
+version: "3.7"
+
+services:
+  postgres:
+    container_name: db
+    image: postgres:12-alpine
+    restart: always
+    environment:
+      POSTGRES_DB: ${POSTGRES_DATABASE}
+      POSTGRES_USER: ${POSTGRES_USERNAME}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      PGTZ: ${POSTGRES_TIMEZONE}
+    ports:
+      - target: 5432
+        published: ${POSTGRES_ENDPOINT_PORT}
+        protocol: tcp
+        mode: host
+    healthcheck:
+      test: pg_isready -U "$$POSTGRES_USER" -d "$$POSTGRES_DB"
+      interval: 10s
+      timeout: 2s
+      retries: 10
+    volumes:
+      ## To executes ['initialization scripts'](https://hub.docker.com/_/postgres),
+      ## uncomment the next line, create ./data directory, and add .sh or .sql files under ./data
+      # - ./data:/docker-entrypoint-initdb.d
+      - postgres_data:/var/lib/postgresql/data
+  graphql-engine:
+    container_name: hasura
+    image: hasura/graphql-engine:latest
+    ports:
+      - target: 8080
+        published: ${HASURA_ENDPOINT_PORT}
+        protocol: tcp
+        mode: host
+    volumes:
+      - ./services/hasura/migrations:/hasura-migrations
+    depends_on:
+      postgres:
+        condition: service_healthy
+    restart: always
+    environment:
+      HASURA_GRAPHQL_DATABASE_URL: "postgres://${POSTGRES_USERNAME}:${POSTGRES_PASSWORD}@postgres:5432/${POSTGRES_DATABASE}"
+      HASURA_GRAPHQL_ENABLE_CONSOLE: ${HASURA_GRAPHQL_ENABLE_CONSOLE}
+      HASURA_GRAPHQL_ENABLED_LOG_TYPES: ${HASURA_GRAPHQL_ENABLED_LOG_TYPES}
+      ## uncomment next line to set an admin secret
+      # HASURA_GRAPHQL_ADMIN_SECRET: '${HASURA_GRAPHQL_ADMIN_SECRET}'
+
+volumes:
+  postgres_data: {}
