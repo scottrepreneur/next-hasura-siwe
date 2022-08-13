@@ -1,6 +1,11 @@
 import { AppProps } from 'next/app';
 import Head from 'next/head';
 import { ChakraProvider } from '@chakra-ui/react';
+import { RainbowKitProvider } from '@rainbow-me/rainbowkit';
+import { WagmiConfig } from 'wagmi';
+import { wagmiClient, chains } from '../utils/web3';
+
+import '@rainbow-me/rainbowkit/styles.css';
 
 function CustomApp({ Component, pageProps }: AppProps) {
   return (
@@ -9,9 +14,13 @@ function CustomApp({ Component, pageProps }: AppProps) {
         <title>Welcome to next-hasura-siwe!</title>
       </Head>
       <ChakraProvider>
-        <main className="app">
-          <Component {...pageProps} />
-        </main>
+        <WagmiConfig client={wagmiClient}>
+          <RainbowKitProvider chains={chains}>
+            <main className="app">
+              <Component {...pageProps} />
+            </main>
+          </RainbowKitProvider>
+        </WagmiConfig>
       </ChakraProvider>
     </>
   );

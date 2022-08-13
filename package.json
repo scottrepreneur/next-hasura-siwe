@@ -14,7 +14,9 @@
     "@emotion/react": "^11.10.0",
     "@emotion/styled": "^11.10.0",
     "@nrwl/next": "14.5.1",
+    "@rainbow-me/rainbowkit": "^0.4.6",
     "core-js": "^3.6.5",
+    "ethers": "^5.6.9",
     "framer-motion": "^7.1.0",
     "next": "12.2.3",
     "react": "18.2.0",
@@ -22,7 +24,8 @@
     "react-is": "18.2.0",
     "regenerator-runtime": "0.13.7",
     "styled-components": "5.3.5",
-    "tslib": "^2.3.0"
+    "tslib": "^2.3.0",
+    "wagmi": "^0.6.2"
   },
   "devDependencies": {
     "@nrwl/cli": "14.5.1",
