@@ -1,6 +1,6 @@
 import { AppProps } from 'next/app';
 import Head from 'next/head';
-import './styles.css';
+import { ChakraProvider } from '@chakra-ui/react';
 
 function CustomApp({ Component, pageProps }: AppProps) {
   return (
@@ -8,9 +8,11 @@ function CustomApp({ Component, pageProps }: AppProps) {
       <Head>
         <title>Welcome to next-hasura-siwe!</title>
       </Head>
-      <main className="app">
-        <Component {...pageProps} />
-      </main>
+      <ChakraProvider>
+        <main className="app">
+          <Component {...pageProps} />
+        </main>
+      </ChakraProvider>
     </>
   );
 }
