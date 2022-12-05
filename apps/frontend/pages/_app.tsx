@@ -2,6 +2,8 @@ import { AppProps } from 'next/app';
 import Head from 'next/head';
 import { ChakraProvider } from '@chakra-ui/react';
 import { RainbowKitProvider } from '@rainbow-me/rainbowkit';
+import { RainbowKitSiweNextAuthProvider } from '@rainbow-me/rainbowkit-siwe-next-auth';
+
 import { WagmiConfig } from 'wagmi';
 import { SessionProvider } from 'next-auth/react';
 import { wagmiClient, chains } from '../utils/web3';
@@ -18,15 +20,17 @@ function CustomApp({
         <title>Welcome to next-hasura-siwe!</title>
       </Head>
       <ChakraProvider>
-        <SessionProvider session={session}>
-          <WagmiConfig client={wagmiClient}>
-            <RainbowKitProvider chains={chains}>
-              <main className='app'>
-                <Component {...pageProps} />
-              </main>
-            </RainbowKitProvider>
-          </WagmiConfig>
-        </SessionProvider>
+        <WagmiConfig client={wagmiClient}>
+          <SessionProvider session={session} refetchInterval={0}>
+            <RainbowKitSiweNextAuthProvider>
+              <RainbowKitProvider chains={chains}>
+                <main className='app'>
+                  <Component {...pageProps} />
+                </main>
+              </RainbowKitProvider>
+            </RainbowKitSiweNextAuthProvider>
+          </SessionProvider>
+        </WagmiConfig>
       </ChakraProvider>
     </>
   );

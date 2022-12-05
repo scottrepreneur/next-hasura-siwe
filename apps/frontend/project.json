@@ -1,6 +1,6 @@
 {
   "$schema": "../../node_modules/nx/schemas/project-schema.json",
-  "sourceRoot": "apps/next-hasura-siwe",
+  "sourceRoot": "apps/frontend",
   "projectType": "application",
   "targets": {
     "build": {
@@ -8,12 +8,12 @@
       "outputs": ["{options.outputPath}"],
       "defaultConfiguration": "production",
       "options": {
-        "root": "apps/next-hasura-siwe",
-        "outputPath": "dist/apps/next-hasura-siwe"
+        "root": "apps/frontend",
+        "outputPath": "dist/apps/frontend"
       },
       "configurations": {
         "development": {
-          "outputPath": "tmp/apps/next-hasura-siwe"
+          "outputPath": "tmp/apps/frontend"
         },
         "production": {}
       }
@@ -22,16 +22,16 @@
       "executor": "@nrwl/next:server",
       "defaultConfiguration": "development",
       "options": {
-        "buildTarget": "next-hasura-siwe:build",
+        "buildTarget": "frontend:build",
         "dev": true
       },
       "configurations": {
         "development": {
-          "buildTarget": "next-hasura-siwe:build:development",
+          "buildTarget": "frontend:build:development",
           "dev": true
         },
         "production": {
-          "buildTarget": "next-hasura-siwe:build:production",
+          "buildTarget": "frontend:build:production",
           "dev": false
         }
       }
@@ -39,14 +39,14 @@
     "export": {
       "executor": "@nrwl/next:export",
       "options": {
-        "buildTarget": "next-hasura-siwe:build:production"
+        "buildTarget": "frontend:build:production"
       }
     },
     "test": {
       "executor": "@nrwl/jest:jest",
-      "outputs": ["coverage/apps/next-hasura-siwe"],
+      "outputs": ["coverage/apps/frontend"],
       "options": {
-        "jestConfig": "apps/next-hasura-siwe/jest.config.ts",
+        "jestConfig": "apps/frontend/jest.config.ts",
         "passWithNoTests": true
       }
     },
@@ -54,7 +54,7 @@
       "executor": "@nrwl/linter:eslint",
       "outputs": ["{options.outputFile}"],
       "options": {
-        "lintFilePatterns": ["apps/next-hasura-siwe/**/*.{ts,tsx,js,jsx}"]
+        "lintFilePatterns": ["apps/frontend/**/*.{ts,tsx,js,jsx}"]
       }
     }
   },

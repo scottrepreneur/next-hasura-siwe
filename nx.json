@@ -32,10 +32,9 @@
     },
     "@nrwl/next": {
       "application": {
-        "style": "styled-components",
         "linter": "eslint"
       }
     }
   },
-  "defaultProject": "next-hasura-siwe"
+  "defaultProject": "frontend"
 }

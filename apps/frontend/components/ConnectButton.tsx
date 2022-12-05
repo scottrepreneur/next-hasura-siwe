@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { ConnectButton as RainbowConnectButton } from '@rainbow-me/rainbowkit';
 import {
   Button,
@@ -60,6 +60,12 @@ const ConnectButton = () => {
     disconnect();
   };
 
+  useEffect(() => {
+    if (address && !session) {
+      handleLogin();
+    }
+  }, [address, session]);
+
   return (
     <RainbowConnectButton.Custom>
       {({
@@ -69,6 +75,7 @@ const ConnectButton = () => {
         openChainModal,
         openConnectModal,
         mounted,
+        authenticationStatus,
       }) => (
         <div
           {...(!mounted && {
