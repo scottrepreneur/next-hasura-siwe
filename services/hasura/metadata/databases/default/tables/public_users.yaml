@@ -1,3 +1,19 @@
 table:
-  schema: public
   name: users
+  schema: public
+array_relationships:
+  - name: contracts
+    using:
+      foreign_key_constraint_on:
+        column: user_id
+        table:
+          name: contracts
+          schema: public
+select_permissions:
+  - role: public
+    permission:
+      columns:
+        - address
+      filter:
+        address:
+          _eq: X-Hasura-User-Id

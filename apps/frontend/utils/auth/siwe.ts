@@ -8,7 +8,6 @@ import {
 } from '../../types';
 
 const NEXTAUTH_URL = process.env.NEXTAUTH_URL;
-const NEXTAUTH_HOST = new URL(NEXTAUTH_URL).host;
 
 const defaultCredential = { type: 'text', placeholder: '0x0' };
 export const siweCredentials = {
@@ -38,7 +37,10 @@ const checkDomain = ({
   siwe,
   credentials,
 }: SiweCredentialParams): Promise<SiweCredentialParams> => {
-  if (!_.eq(_.get(siwe, 'domain'), NEXTAUTH_HOST)) {
+  if (!NEXTAUTH_URL) {
+    return Promise.reject({ error: 'Invalid domain' });
+  }
+  if (!_.eq(_.get(siwe, 'domain'), new URL(NEXTAUTH_URL).host)) {
     return Promise.reject({ error: 'Invalid domain' });
   }
   return Promise.resolve({ siwe, credentials });
@@ -64,7 +66,6 @@ export const authorizeSiweMessage = (
     .then((data) => checkDomain(data))
     .then((data) => checkSignature(data))
     .then(({ siwe }) => {
-      console.log('siwe', siwe);
       return { id: _.toLower(_.get(siwe, 'address')) };
     })
     .catch((e) => {

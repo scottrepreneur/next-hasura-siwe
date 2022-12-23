@@ -8,18 +8,23 @@ import {
   MenuList,
   MenuItem,
   Icon,
+  HStack,
+  Heading,
+  Box,
+  useMediaQuery,
 } from '@chakra-ui/react';
 import { ChevronDownIcon } from '@chakra-ui/icons';
 import Image from 'next/image';
-import { useSession } from 'next-auth/react';
-import { useAccount, useEnsName, useDisconnect } from 'wagmi';
+import { useAccount, useEnsName, useDisconnect, useEnsAvatar } from 'wagmi';
 
 const ConnectButton = () => {
   const { address } = useAccount();
   const { disconnect } = useDisconnect();
   const { data: ensName } = useEnsName({ address });
-  const { data: session } = useSession();
-  console.log(session);
+  const { data: ensAvatar } = useEnsAvatar({ address });
+
+  const blockie = null; // TODO implement blockie or other solution
+  const [upTo780] = useMediaQuery('(max-width: 780px)');
 
   return (
     <RainbowConnectButton.Custom>
@@ -84,14 +89,32 @@ const ConnectButton = () => {
                     )}
                   </Button>
 
-                  <Menu>
+                  <Menu placement='bottom-end'>
                     <MenuButton
                       as={Button}
                       rightIcon={<Icon as={ChevronDownIcon} />}
-                      border='2px'
-                      borderColor={!session ? 'red.300' : 'green.500'}
                     >
-                      {ensName || account.displayName}
+                      <HStack spacing={2} align='center'>
+                        {(ensAvatar || blockie) && !upTo780 && (
+                          <Box
+                            height='25px'
+                            width='25px'
+                            borderRadius='50%'
+                            overflow='hidden'
+                          >
+                            <Image
+                              src={ensAvatar || blockie}
+                              alt='User Avatar'
+                              height='25px'
+                              width='25px'
+                            />
+                          </Box>
+                        )}
+
+                        <Heading size='sm'>
+                          {ensName || account.displayName}
+                        </Heading>
+                      </HStack>
                     </MenuButton>
                     <MenuList>
                       <MenuItem onClick={openAccountModal}>Wallet</MenuItem>

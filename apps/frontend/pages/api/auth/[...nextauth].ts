@@ -4,7 +4,7 @@ import { NextApiRequest, NextApiResponse } from 'next';
 import {
   siweCredentials,
   authorizeSiweMessage,
-  extendSessionWithToken,
+  extendSessionWithUserAndToken,
   encodeAuth,
   decodeAuth,
   CONFIG,
@@ -19,13 +19,17 @@ const siweProvider = CredentialsProvider({
     authorizeSiweMessage({ credentials, req }),
 });
 
+type NextAuthOptions = Parameters<typeof NextAuth>[2];
+
 const Auth = async (req: NextApiRequest, res: NextApiResponse) => {
-  return await NextAuth(req, res, {
+  const options: NextAuthOptions = {
     providers: [siweProvider],
     session: { strategy: 'jwt', maxAge: CONFIG.defaultMaxAge },
     jwt: { secret: NEXTAUTH_SECRET, encode: encodeAuth, decode: decodeAuth },
-    callbacks: { session: extendSessionWithToken },
-  });
+    callbacks: { session: extendSessionWithUserAndToken },
+  };
+
+  return await NextAuth(req, res, options);
 };
 
 export default Auth;

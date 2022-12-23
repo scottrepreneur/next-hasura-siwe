@@ -7,11 +7,9 @@ import {
 } from '../gql';
 import { IUser } from '../../types';
 
-// * user lookup
-
-const fetchExistingUser = async (address: string): Promise<IUser> =>
+const fetchExistingUser = async (address: string): Promise<IUser | null> =>
   apolloClient()
-    .query<IUser>({
+    .query({
       query: USER_DETAIL_BY_ADDRESS_QUERY,
       variables: { address: _.toLower(address) },
     })
@@ -26,7 +24,7 @@ const fetchExistingUser = async (address: string): Promise<IUser> =>
       return Promise.reject(error);
     });
 
-const createNewUser = async (address: string): Promise<IUser> =>
+const createNewUser = async (address: string): Promise<IUser | null> =>
   apolloClient()
     .mutate({
       mutation: USER_CREATE_MUTATION,

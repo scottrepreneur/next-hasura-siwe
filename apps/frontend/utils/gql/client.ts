@@ -7,7 +7,7 @@ import {
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
-const setLink = ({ token }) => {
+const setLink = ({ token, userId }) => {
   const httpLink = new HttpLink({ uri: API_URL });
 
   const authLink = new ApolloLink((operation, forward) => {
@@ -15,6 +15,7 @@ const setLink = ({ token }) => {
     const headers = { authorization: null };
     if (token) {
       headers.authorization = `Bearer ${token}`;
+      headers['x-hasura-user-id'] = userId;
     } else {
       headers['x-hasura-admin-secret'] =
         process.env.HASURA_GRAPHQL_ADMIN_SECRET;
@@ -31,8 +32,8 @@ const setLink = ({ token }) => {
   return authLink.concat(httpLink);
 };
 
-export const apolloClient = (token?: string) =>
+export const apolloClient = (token?: string, userId?: string) =>
   new ApolloClient({
-    link: setLink({ token }),
+    link: setLink({ token, userId }),
     cache: new InMemoryCache(),
   });

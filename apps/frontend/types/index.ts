@@ -5,10 +5,22 @@ import { SiweMessage } from 'siwe';
 // camelized version of DB columns
 
 export interface IUser {
-  id: string;
   address: string;
   createdAt: Date;
   updatedAt: Date;
+}
+
+export interface IContract {
+  name: string;
+  address: string;
+  chainId: number;
+  createdAt: Date;
+  updatedAt: Date;
+}
+
+export interface IContractCreate {
+  address: string;
+  chainId: number;
 }
 
 // AUTH
@@ -30,11 +42,13 @@ export type HasuraAuthToken = {
   exp?: number;
   'https://hasura.io/jwt/claims'?: {
     'x-hasura-allowed-roles': string[];
-    'x-hasura-default-role': string;
-    'x-hasura-role': string;
+    'x-hasura-default-role'?: string;
+    'x-hasura-role'?: string;
     'x-hasura-user-id': string;
   };
 };
+
+// SIWE verifications
 
 export type SiweAuthorizeParams = {
   credentials: Record<'message' | 'signature', string>;

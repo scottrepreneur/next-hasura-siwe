@@ -22,7 +22,6 @@ export const createToken = ({
 }: CreateTokenParams): HasuraAuthToken => ({
   ...token, // TODO look into saving address for sub?
   user: {
-    id: _.get(user, 'id'),
     address: _.get(token, 'sub'),
   },
   iat: Math.floor(Date.now() / 1000),
@@ -31,7 +30,7 @@ export const createToken = ({
     'x-hasura-allowed-roles': roles ?? CONFIG.defaultRoles,
     'x-hasura-default-role': _.first(roles ?? CONFIG.defaultRoles),
     'x-hasura-role': _.first(roles ?? CONFIG.defaultRoles),
-    'x-hasura-user-id': _.get(user, 'id'),
+    'x-hasura-user-id': _.get(token, 'sub'),
   },
 });
 
@@ -60,7 +59,7 @@ export const decodeToken = (token: string) =>
 export const decodeAuth = async ({ token }: JWTDecodeParams) =>
   decodeToken(token);
 
-export const extendSessionWithToken = ({
+export const extendSessionWithUserAndToken = ({
   session,
   token,
 }: {
@@ -68,6 +67,6 @@ export const extendSessionWithToken = ({
   token: JWT;
 }) => ({
   ...session,
-  // is there a better way to access the token on the client? SSR?
+  user: token.user,
   token: encodeToken(token),
 });
