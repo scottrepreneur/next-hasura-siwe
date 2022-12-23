@@ -1,7 +1,7 @@
 import { AppProps } from 'next/app';
 import Head from 'next/head';
 import { ChakraProvider } from '@chakra-ui/react';
-import { RainbowKitProvider } from '@rainbow-me/rainbowkit';
+import { RainbowKitProvider, darkTheme } from '@rainbow-me/rainbowkit';
 import { RainbowKitSiweNextAuthProvider } from '@rainbow-me/rainbowkit-siwe-next-auth';
 
 import { WagmiConfig } from 'wagmi';
@@ -23,7 +23,7 @@ function CustomApp({
         <WagmiConfig client={wagmiClient}>
           <SessionProvider session={session} refetchInterval={0}>
             <RainbowKitSiweNextAuthProvider>
-              <RainbowKitProvider chains={chains}>
+              <RainbowKitProvider chains={chains} theme={darkTheme()}>
                 <main className='app'>
                   <Component {...pageProps} />
                 </main>
