@@ -2,7 +2,7 @@ version: "3.7"
 
 services:
   postgres:
-    container_name: db
+    container_name: template_db
     image: postgres:12-alpine
     restart: always
     environment:
@@ -26,7 +26,7 @@ services:
       # - ./data:/docker-entrypoint-initdb.d
       - postgres_data:/var/lib/postgresql/data
   graphql-engine:
-    container_name: hasura
+    container_name: template_hasura
     image: hasura/graphql-engine:latest
     ports:
       - target: 8080
@@ -43,8 +43,11 @@ services:
       HASURA_GRAPHQL_DATABASE_URL: "postgres://${POSTGRES_USERNAME}:${POSTGRES_PASSWORD}@postgres:5432/${POSTGRES_DATABASE}"
       HASURA_GRAPHQL_ENABLE_CONSOLE: ${HASURA_GRAPHQL_ENABLE_CONSOLE}
       HASURA_GRAPHQL_ENABLED_LOG_TYPES: ${HASURA_GRAPHQL_ENABLED_LOG_TYPES}
+      # HASURA_ACTION_SECRET: ${HASURA_ACTION_SECRET}
       ## uncomment next line to set an admin secret
-      # HASURA_GRAPHQL_ADMIN_SECRET: '${HASURA_GRAPHQL_ADMIN_SECRET}'
+      HASURA_GRAPHQL_ADMIN_SECRET: '${HASURA_GRAPHQL_ADMIN_SECRET}'
+      ## uncomment to set unauthorized role, requires admin secret ^^^
+      HASURA_GRAPHQL_UNAUTHORIZED_ROLE: ${HASURA_GRAPHQL_UNAUTHORIZED_ROLE}
 
 volumes:
   postgres_data: {}

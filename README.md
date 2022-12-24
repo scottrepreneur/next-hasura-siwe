@@ -9,7 +9,7 @@
 - Chakra UI
 - Apollo
 
-Read the full getting started [here](https://scottherren.com/posts/2022-08-16---Next-Hasura-SIWE-Template/).
+Read the full getting started [here](https://me.scottrepreneur.eth.limo/posts/2022-08-16---Next-Hasura-SIWE-Template/).
 
 ## Get Started
 
