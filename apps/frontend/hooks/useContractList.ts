@@ -1,22 +1,24 @@
 import _ from 'lodash';
 import { useQuery } from '@tanstack/react-query';
-import { CONTRACT_LIST_QUERY, apolloClient, camelize } from '../utils';
+import { CONTRACT_LIST_QUERY, client, camelize } from '../utils';
 import { IContract } from '../types';
+import { User } from 'next-auth';
 
 type useContractListProps = {
   token?: string;
-  user?: { address: string };
+  user?: Partial<User>;
 };
 
 const useContractList = ({ token, user }: useContractListProps) => {
   const contractListQueryResult = async () => {
     if (!token) return;
 
-    const result = await apolloClient(token, _.get(user, 'address')).query({
-      query: CONTRACT_LIST_QUERY,
-    });
+    const result = await client({
+      token,
+      userId: _.get(user, 'address'),
+    }).request(CONTRACT_LIST_QUERY);
 
-    return camelize(_.get(result, 'data.contracts'));
+    return camelize(_.get(result, 'contracts'));
   };
 
   const { status, error, data, isLoading } = useQuery<

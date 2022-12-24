@@ -1,7 +1,7 @@
 import _ from 'lodash';
 import jwt from 'jsonwebtoken';
 import { JWT, JWTDecodeParams } from 'next-auth/jwt';
-import { Session } from 'next-auth';
+import { Session, User } from 'next-auth';
 import { CreateTokenParams, HasuraAuthToken } from '../../types';
 import { getOrCreateUser } from './queryHelpers';
 
@@ -20,10 +20,8 @@ export const createToken = ({
   maxAge,
   roles,
 }: CreateTokenParams): HasuraAuthToken => ({
-  ...token, // TODO look into saving address for sub?
-  user: {
-    address: _.get(token, 'sub'),
-  },
+  ...token,
+  address: _.get(token, 'sub'),
   iat: Math.floor(Date.now() / 1000),
   exp: Math.floor(Date.now() / 1000) + (maxAge ?? CONFIG.defaultMaxAge),
   'https://hasura.io/jwt/claims': {
@@ -44,7 +42,7 @@ export const encodeAuth = async ({
   token?: HasuraAuthToken;
   maxAge?: number;
 }) => {
-  if (_.get(token, 'user')) return encodeToken(token);
+  if (_.get(token, 'exp')) return encodeToken(token);
 
   const user = await getOrCreateUser(_.get(token, 'sub'));
 
@@ -65,8 +63,10 @@ export const extendSessionWithUserAndToken = ({
 }: {
   session: Session;
   token: JWT;
-}) => ({
+}): Session => ({
   ...session,
-  user: token.user,
+  user: {
+    address: _.get(token, 'sub'),
+  },
   token: encodeToken(token),
 });

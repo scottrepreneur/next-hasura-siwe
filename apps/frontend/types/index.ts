@@ -34,10 +34,7 @@ export type CreateTokenParams = {
 
 export type HasuraAuthToken = {
   sub?: string;
-  user?: {
-    id?: string;
-    address?: string;
-  };
+  address?: string;
   iat?: number;
   exp?: number;
   'https://hasura.io/jwt/claims'?: {

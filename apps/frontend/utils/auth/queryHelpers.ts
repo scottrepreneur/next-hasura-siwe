@@ -1,21 +1,18 @@
 import _ from 'lodash';
 import { isAddress } from '@ethersproject/address';
 import {
-  apolloClient,
+  client,
   USER_CREATE_MUTATION,
   USER_DETAIL_BY_ADDRESS_QUERY,
 } from '../gql';
 import { IUser } from '../../types';
 
 const fetchExistingUser = async (address: string): Promise<IUser | null> =>
-  apolloClient()
-    .query({
-      query: USER_DETAIL_BY_ADDRESS_QUERY,
-      variables: { address: _.toLower(address) },
-    })
+  client({})
+    .request(USER_DETAIL_BY_ADDRESS_QUERY, { address: _.toLower(address) })
     .then((res) => {
-      if (!_.isEmpty(_.get(res, 'data.users'))) {
-        return Promise.resolve(_.first(_.get(res, 'data.users')));
+      if (!_.isEmpty(_.get(res, 'users'))) {
+        return Promise.resolve(_.first(_.get(res, 'users')));
       }
       return Promise.resolve(null);
     })
@@ -25,14 +22,11 @@ const fetchExistingUser = async (address: string): Promise<IUser | null> =>
     });
 
 const createNewUser = async (address: string): Promise<IUser | null> =>
-  apolloClient()
-    .mutate({
-      mutation: USER_CREATE_MUTATION,
-      variables: { address: _.toLower(address) },
-    })
+  client({})
+    .request(USER_CREATE_MUTATION, { address: _.toLower(address) })
     .then((res) => {
-      if (_.get(res, 'data.insert_users.returning')) {
-        return Promise.resolve(_.get(res, 'data.insert_users.returning'));
+      if (_.get(res, 'insert_users.returning')) {
+        return Promise.resolve(_.get(res, 'insert_users.returning'));
       }
       return Promise.resolve(null);
     })

@@ -48,6 +48,8 @@ services:
       HASURA_GRAPHQL_ADMIN_SECRET: '${HASURA_GRAPHQL_ADMIN_SECRET}'
       ## uncomment to set unauthorized role, requires admin secret ^^^
       HASURA_GRAPHQL_UNAUTHORIZED_ROLE: ${HASURA_GRAPHQL_UNAUTHORIZED_ROLE}
+      ## uncomment next line to set JWT secret
+      # HASURA_GRAPHQL_JWT_SECRET: '${HASURA_GRAPHQL_JWT_SECRET}'
 
 volumes:
   postgres_data: {}
