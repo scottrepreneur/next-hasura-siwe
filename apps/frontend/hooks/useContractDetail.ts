@@ -1,6 +1,6 @@
 import _ from 'lodash';
 import { useQuery } from '@tanstack/react-query';
-import { CONTRACT_DETAIL_QUERY, apolloClient } from '../utils';
+import { CONTRACT_DETAIL_QUERY, client } from '../utils';
 
 type useContractDetailProps = {
   token?: string;
@@ -14,12 +14,12 @@ const useContractDetail = ({
   user,
 }: useContractDetailProps) => {
   const contractDetailQueryResult = async () => {
-    const result = await apolloClient(token, _.get(user, 'address')).query({
-      query: CONTRACT_DETAIL_QUERY,
-      variables: { address },
-    });
+    const result = await client({
+      token,
+      userId: _.get(user, 'address'),
+    }).request(CONTRACT_DETAIL_QUERY, { address });
 
-    return _.first(_.get(result, 'data.contracts'));
+    return _.first(_.get(result, 'contracts'));
   };
 
   const { status, error, data, isLoading } = useQuery({

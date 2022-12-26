@@ -21,7 +21,6 @@ export const getErrorMessage = (
   errors: Partial<FieldErrorsImpl>
 ) => {
   const message = errors[key].message;
-  console.log(message);
   if (typeof message === 'string') {
     return message;
   }

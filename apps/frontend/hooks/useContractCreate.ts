@@ -2,7 +2,7 @@ import _ from 'lodash';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useToast } from '@chakra-ui/react';
 import { IContractCreate } from '../types';
-import { apolloClient, CONTRACT_CREATE_MUTATION } from '../utils';
+import { client, CONTRACT_CREATE_MUTATION } from '../utils';
 import { useRouter } from 'next/router';
 
 type useContractCreateProps = {
@@ -17,15 +17,15 @@ const useContractCreate = ({ user, token }: useContractCreateProps) => {
 
   const { mutate, mutateAsync, status, error, isLoading } = useMutation(
     async ({ ...args }: IContractCreate) => {
-      const result = await apolloClient(token, user).mutate({
-        mutation: CONTRACT_CREATE_MUTATION,
-        variables: {
+      const result = await client({ token, userId: user }).request(
+        CONTRACT_CREATE_MUTATION,
+        {
           contract: {
             user_id: user,
             ...args,
           },
-        },
-      });
+        }
+      );
 
       return _.first(_.get(result, 'data.insert_contracts.returning'));
     },

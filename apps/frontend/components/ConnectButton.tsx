@@ -13,7 +13,7 @@ import {
   Box,
   useMediaQuery,
 } from '@chakra-ui/react';
-import { ChevronDownIcon } from '@chakra-ui/icons';
+import { FaChevronDown } from 'react-icons/fa';
 import Image from 'next/image';
 import { useAccount, useEnsName, useDisconnect, useEnsAvatar } from 'wagmi';
 
@@ -92,7 +92,7 @@ const ConnectButton = () => {
                   <Menu placement='bottom-end'>
                     <MenuButton
                       as={Button}
-                      rightIcon={<Icon as={ChevronDownIcon} />}
+                      rightIcon={<Icon as={FaChevronDown} />}
                     >
                       <HStack spacing={2} align='center'>
                         {(ensAvatar || blockie) && !upTo780 && (
