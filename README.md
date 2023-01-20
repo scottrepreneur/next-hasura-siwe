@@ -51,8 +51,8 @@ yarn nx run next-hasura-siwe:hasura-migrate
 hasura migrate apply --database-name default
 ```
 
+> [Note] Migrations will be auto-run on `docker-compose up` by hasura-setup container
 > [Note] Replace the initial SQL migration with your own models. Or extend your models and remove that model later.
-
 > [Gotcha] Drop your database with `docker compose down -v` and apply the new migrations.
 
 ### Hasura Metadata
@@ -65,6 +65,8 @@ yarn nx run next-hasura-siwe:hasura-apply
 hasura metadata apply --database-name default
 ```
 
+> [Note] Metadata will be auto-run on `docker-compose up` by hasura-setup container
+
 ### Hasura Seeds
 
 Hasura seeds are a way to manage your database data. They are stored in the `hasura/seeds` directory. You can apply the seeds by running:
@@ -75,6 +77,7 @@ yarn nx run next-hasura-siwe:hasura-apply-seeds
 hasura seeds apply --database-name default
 ```
 
+> [Note] Seeds will be auto-run on `docker-compose up` by hasura-setup container
 ### Hasura JWT Auth
 
 The default setup uses JWT Auth. Setting the `HASURA_GRAPHQL_ADMIN_SECRET` enables general Auth on the Hasura API and `HASURA_GRAPHQL_JWT_SECRET` enables JWT Auth. The JWT secret is a JSON object with the following properties:
